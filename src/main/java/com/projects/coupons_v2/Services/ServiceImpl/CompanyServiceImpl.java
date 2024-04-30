@@ -57,7 +57,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void deleteCoupon(int couponID) throws CompanyException {
         if (couponRepo.findById(couponID).isPresent()) {
-            couponRepo.delete(couponRepo.findById(couponID).get());
+            Coupon coupon = couponRepo.findById(couponID).get();
+            couponRepo.delete(coupon);
+            couponRepo.saveAndFlush(coupon);
         }
         else throw new CompanyException(CompanyMsg.COUPON_DOES_NOT_EXIST);
     }
