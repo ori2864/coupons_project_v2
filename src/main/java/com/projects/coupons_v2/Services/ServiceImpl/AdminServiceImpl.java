@@ -10,19 +10,23 @@ import com.projects.coupons_v2.Exceptions.CustomerExceptions.CustomerMsg;
 import com.projects.coupons_v2.Exceptions.GeneralExceptions.GeneralException;
 import com.projects.coupons_v2.Exceptions.GeneralExceptions.GeneralMsg;
 import com.projects.coupons_v2.Repositories.CompanyRepo;
+import com.projects.coupons_v2.Repositories.CouponRepo;
 import com.projects.coupons_v2.Repositories.CustomerRepo;
 import com.projects.coupons_v2.Services.ServiceInterfaces.AdminService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
     private final CompanyRepo companyRepo;
     private final CustomerRepo customerRepo;
+    private final CouponRepo couponRepo;
 
     @Override
     public Boolean login(String email, String password) throws CouponException, GeneralException {
@@ -59,11 +63,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
     public void deleteCompany(int companyID) throws CompanyException {
         if (companyRepo.findById(companyID).isPresent()) {
-            var company = companyRepo.findById(companyID).get();
-            company.setCoupons(null);
-            companyRepo.saveAndFlush(company);
+//            Company company = companyRepo.findById(companyID).get();
+//            couponRepo.deleteByCompanyID(companyID);
+            //company.setCoupons(null);
+//            companyRepo.saveAndFlush(company);
             companyRepo.deleteById(companyID);
         }
         else throw new CompanyException(CompanyMsg.COMPANY_DOES_NOT_EXIST);
@@ -102,9 +108,9 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteCustomer(int customerID) {
         if (companyRepo.findById(customerID).isPresent()) {
-            var customer = customerRepo.findById(customerID).get();
-            customer.setCoupons(null);
-            customerRepo.saveAndFlush(customer);
+//            Customer customer = customerRepo.findById(customerID).get();
+//            customer.setCoupons(null);
+//            customerRepo.saveAndFlush(customer);
             customerRepo.deleteById(customerID);
         }
     }

@@ -3,6 +3,7 @@ package com.projects.coupons_v2.Services.ServiceInterfaces;
 import com.projects.coupons_v2.Beans.Category;
 import com.projects.coupons_v2.Beans.Company;
 import com.projects.coupons_v2.Beans.Coupon;
+import com.projects.coupons_v2.Beans.UserDetails;
 import com.projects.coupons_v2.Exceptions.CompanyExceptions.CompanyException;
 import com.projects.coupons_v2.Exceptions.CouponExceptions.CouponException;
 
@@ -18,5 +19,6 @@ public interface CompanyService {
     List<Coupon> getCompanyCoupons(Category category) throws CompanyException;
     List<Coupon> getCompanyCoupons(double maxPrice) throws CompanyException;
     Company getCompanyDetails() throws CompanyException;
+     void clearCompanyId();
 
 }

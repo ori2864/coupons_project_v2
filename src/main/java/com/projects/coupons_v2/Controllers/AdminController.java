@@ -8,101 +8,105 @@ import com.projects.coupons_v2.Exceptions.CouponExceptions.CouponException;
 import com.projects.coupons_v2.Exceptions.CustomerExceptions.CustomerException;
 import com.projects.coupons_v2.Exceptions.GeneralExceptions.GeneralException;
 import com.projects.coupons_v2.Services.ServiceInterfaces.AdminService;
+import com.projects.coupons_v2.utils.JWT;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin()
 @RequestMapping("/api/admin")
-public class AdminController implements AdminService {
-    @Autowired
-    AdminService adminService;
+@RequiredArgsConstructor
+public class AdminController {
+    private final JWT jwtUtil;
+    private final AdminService adminService;
 
 
-    @Override
-    @GetMapping("/login/{email}/{password}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Boolean login(@PathVariable String email, @PathVariable String password) throws CouponException, GeneralException {
-        return adminService.login(email, password);
-    }
-
-    @Override
     @PostMapping("/add/company")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addCompany(@RequestBody Company company) throws CouponException, CompanyException {
+    public ResponseEntity<?> addCompany(@RequestHeader("Authorization") String jwt, @RequestBody Company company) throws CouponException, CompanyException {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         adminService.addCompany(company);
+        return new ResponseEntity<>(true, headers, HttpStatus.CREATED);
     }
 
-    @Override
+
     @PutMapping("/update/company")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateCompany(@RequestBody Company company) throws CouponException, CompanyException {
+    public ResponseEntity<?> updateCompany(@RequestHeader("Authorization") String jwt, @RequestBody Company company) throws CouponException, CompanyException {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         adminService.updateCompany(company);
+        return new ResponseEntity<>(true, headers, HttpStatus.ACCEPTED);
     }
 
-    @Override
+
     @DeleteMapping("/delete/company/{companyID}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteCompany(@PathVariable int companyID) throws CompanyException {
+    public ResponseEntity<?> deleteCompany(@RequestHeader("Authorization") String jwt, @PathVariable int companyID) throws CompanyException {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         adminService.deleteCompany(companyID);
+        return new ResponseEntity<>(true, headers, HttpStatus.ACCEPTED);
     }
 
-    @Override
+
     @GetMapping("/get/all/companies")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<Company> getAllCompanies() {
-        return adminService.getAllCompanies();
+    public ResponseEntity<?> getAllCompanies(@RequestHeader("Authorization") String jwt) {
+
+        return new ResponseEntity<>(adminService.getAllCompanies(), jwtUtil.getHeaders(jwt), HttpStatus.ACCEPTED);
     }
 
-    @Override
-    @GetMapping("/get/one/{companyID}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Company getOneCompany(@PathVariable int companyID) throws CouponException, CompanyException {
-        return adminService.getOneCompany(companyID);
+
+    @GetMapping("/get/one/company/{companyID}")
+    public ResponseEntity<?> getOneCompany(@RequestHeader("Authorization") String jwt, @PathVariable int companyID) throws CouponException, CompanyException {
+
+        return new ResponseEntity<>(adminService.getOneCompany(companyID), jwtUtil.getHeaders(jwt), HttpStatus.ACCEPTED);
     }
 
-    @Override
+
     @PostMapping("/add/customer")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addCustomer(@RequestBody Customer customer) throws CouponException, CustomerException {
+    public ResponseEntity<?> addCustomer(@RequestHeader("Authorization") String jwt, @RequestBody Customer customer) throws CouponException, CustomerException {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         adminService.addCustomer(customer);
+        return new ResponseEntity<>(true, headers, HttpStatus.CREATED);
     }
 
-    @Override
+
     @PutMapping("/update/customer")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateCustomer(Customer customer) {
+    public ResponseEntity<?> updateCustomer(@RequestHeader("Authorization") String jwt, @RequestBody Customer customer) {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         adminService.updateCustomer(customer);
+        return new ResponseEntity<>(true, headers, HttpStatus.ACCEPTED);
     }
 
-    @Override
+
     @DeleteMapping("/delete/customer/{customerID}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteCustomer(@PathVariable int customerID) {
+    public ResponseEntity<?> deleteCustomer(@RequestHeader("Authorization") String jwt, @PathVariable int customerID) {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         adminService.deleteCustomer(customerID);
+        return new ResponseEntity<>(true, headers, HttpStatus.ACCEPTED);
     }
 
-    @Override
+
     @GetMapping("/get/all/customers")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<Customer> getAllCustomers() {
-        return adminService.getAllCustomers();
+    public ResponseEntity<?> getAllCustomers(@RequestHeader("Authorization") String jwt) {
+        System.out.println(jwtUtil.getHeaders(jwt));
+        return new ResponseEntity<>(adminService.getAllCustomers(), jwtUtil.getHeaders(jwt), HttpStatus.ACCEPTED);
     }
 
-    @Override
+
     @GetMapping("/get/one/customer/{customerID}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Customer getOneCustomer(@PathVariable int customerID) {
-        return adminService.getOneCustomer(customerID);
+    public ResponseEntity<?> getOneCustomer(@RequestHeader("Authorization") String jwt, @PathVariable int customerID) {
+        return new ResponseEntity<>(adminService.getOneCustomer(customerID), jwtUtil.getHeaders(jwt), HttpStatus.ACCEPTED);
     }
 
-    @Override
+
     @DeleteMapping("/delete/coupon/{customerID}/{couponID}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteCouponPurchase(@PathVariable int customerID, @PathVariable int couponID) {
+    public ResponseEntity<?> deleteCouponPurchase(@RequestHeader("Authorization") String jwt, @PathVariable int customerID, @PathVariable int couponID) {
+        HttpHeaders headers = jwtUtil.getHeaders(jwt);
         adminService.deleteCouponPurchase(customerID, couponID);
+        return new ResponseEntity<>(true, headers, HttpStatus.OK);
     }
 }

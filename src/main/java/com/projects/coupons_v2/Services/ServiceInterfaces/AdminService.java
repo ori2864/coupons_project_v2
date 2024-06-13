@@ -2,6 +2,7 @@ package com.projects.coupons_v2.Services.ServiceInterfaces;
 
 import com.projects.coupons_v2.Beans.Company;
 import com.projects.coupons_v2.Beans.Customer;
+import com.projects.coupons_v2.Beans.UserDetails;
 import com.projects.coupons_v2.Exceptions.CompanyExceptions.CompanyException;
 import com.projects.coupons_v2.Exceptions.CouponExceptions.CouponException;
 import com.projects.coupons_v2.Exceptions.CustomerExceptions.CustomerException;

@@ -11,10 +11,6 @@ import java.util.List;
 public interface CouponRepo extends JpaRepository<Coupon,Integer> {
 
     Boolean existsByCompanyIDAndTitle(Integer company_ID, String title);
-   
-
-
-
     List<Coupon> findByCompanyID(Integer companyId);
     Coupon findByTitle(String title);
 
@@ -22,6 +18,7 @@ public interface CouponRepo extends JpaRepository<Coupon,Integer> {
 
     List<Coupon> findByCompanyIDAndPriceLessThan(Integer companyID, double maxPrice);
 
+    void deleteByCompanyID(int companyID);
 
 
     //  void deleteByEndDateBefore(Date endDate);

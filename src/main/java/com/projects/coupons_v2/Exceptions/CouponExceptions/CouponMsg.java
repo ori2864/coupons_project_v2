@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum CouponMsg {
     COUPON_DOES_NOT_EXIST("the coupon id you inserted is not valid, coupon does not exist"),
     ILLEGAL_COUPON_UPDATE("you cannot change company id to existing coupon"),
+    COUPON_OUT_OF_STOCK("sorry, this is coupon is out of stock"),
     COUPON_TITLE_ALREADY_EXISTS("this coupon already exists in this company with this title");
 
 

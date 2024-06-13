@@ -6,70 +6,70 @@ import com.projects.coupons_v2.Beans.Coupon;
 import com.projects.coupons_v2.Exceptions.CompanyExceptions.CompanyException;
 import com.projects.coupons_v2.Exceptions.CouponExceptions.CouponException;
 import com.projects.coupons_v2.Services.ServiceInterfaces.CompanyService;
+import com.projects.coupons_v2.utils.JWT;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin()
 @RequestMapping("/api/company")
-public class CompanyController implements CompanyService {
-    @Autowired
-    CompanyService companyService;
-    @GetMapping("/login/{email}/{password}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @Override
-    public Boolean login(@PathVariable String email, @PathVariable String password) throws  CompanyException {
-        return companyService.login(email,password);
-    }
+@RequiredArgsConstructor
+public class CompanyController  {
+    private final JWT jwtUtil;
+    private final CompanyService companyService;
 
-    @Override
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addCoupon(@RequestBody Coupon coupon) throws CouponException {
+
+    @PostMapping("/add/coupon")
+    public ResponseEntity<?> addCoupon(@RequestHeader("Authorization") String jwt, @RequestBody Coupon coupon) throws CouponException {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         companyService.addCoupon(coupon);
+        return new ResponseEntity<>(true, headers, HttpStatus.CREATED);
     }
 
-    @Override
-    @PutMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateCoupon(@RequestBody Coupon coupon) throws CouponException {
+
+    @PutMapping("/update/coupon")
+    public ResponseEntity<?> updateCoupon(@RequestHeader("Authorization") String jwt,@RequestBody Coupon coupon) throws CouponException {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         companyService.updateCoupon(coupon);
+        return new ResponseEntity<>(true, headers, HttpStatus.ACCEPTED);
     }
 
-    @Override
-    @DeleteMapping("/{couponID}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteCoupon(@PathVariable int couponID) throws CompanyException {
+
+    @DeleteMapping("/delete/coupon/{couponID}")
+    public ResponseEntity<?> deleteCoupon(@RequestHeader("Authorization") String jwt,@PathVariable int couponID) throws CompanyException {
+        HttpHeaders headers=jwtUtil.getHeaders(jwt);
         companyService.deleteCoupon(couponID);
+        return new ResponseEntity<>(true, headers, HttpStatus.ACCEPTED);
     }
 
-    @Override
-    @GetMapping("/get")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Coupon> getCompanyCoupons() throws CompanyException {
-        return companyService.getCompanyCoupons();
+
+    @GetMapping("/get/coupon/all")
+    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt) throws CompanyException {
+        return new ResponseEntity<>(companyService.getCompanyCoupons(), jwtUtil.getHeaders(jwt), HttpStatus.OK);
     }
 
-    @Override
-    @GetMapping("/get/coupons/{category}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Coupon> getCompanyCoupons(@PathVariable Category category) throws CompanyException {
-        return companyService.getCompanyCoupons(category);
+
+    @GetMapping("/get/coupon/by/category/{category}")
+    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt,@PathVariable Category category) throws CompanyException {
+        return new ResponseEntity<>(companyService.getCompanyCoupons(category), jwtUtil.getHeaders(jwt), HttpStatus.OK);
     }
 
-    @Override
-    @GetMapping("/get/coupons/{maxPrice}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Coupon> getCompanyCoupons(@PathVariable double maxPrice) throws CompanyException {
-        return companyService.getCompanyCoupons(maxPrice);
+
+    @GetMapping("/get/coupon/by/price/{maxPrice}")
+    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt,@PathVariable double maxPrice) throws CompanyException {
+        return new ResponseEntity<>(companyService.getCompanyCoupons(maxPrice), jwtUtil.getHeaders(jwt), HttpStatus.OK);
     }
 
-    @Override
+
     @GetMapping("/get/companyDetails")
-    @ResponseStatus(HttpStatus.OK)
-    public Company getCompanyDetails() throws CompanyException {
-        return companyService.getCompanyDetails();
+    public ResponseEntity<?> getCompanyDetails(@RequestHeader("Authorization") String jwt) throws CompanyException {
+        return new ResponseEntity<>(companyService.getCompanyDetails(), jwtUtil.getHeaders(jwt), HttpStatus.OK);
     }
+
 }

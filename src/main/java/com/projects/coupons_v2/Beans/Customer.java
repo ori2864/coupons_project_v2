@@ -33,6 +33,10 @@ public class Customer {
     //    @JoinTable(name = "customers_vs_coupons")
 
     @Singular
-    @OneToMany(cascade = CascadeType.REMOVE)
+//    @OneToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customers_coupons", joinColumns = @JoinColumn(name = "customerId"),
+
+            inverseJoinColumns = @JoinColumn(name = "couponId"))
     private List<Coupon>coupons;
 }
