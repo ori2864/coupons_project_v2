@@ -10,12 +10,19 @@ import com.projects.coupons_v2.Exceptions.CustomerExceptions.CustomerException;
 import java.util.List;
 
 public interface CustomerService {
-    Boolean login (String email, String password) throws CustomerException;
-    void purchaseCoupon(int couponID) throws CustomerException, CouponException;
-    List<Coupon>getCustomerCoupons() throws CustomerException;
-    List<Coupon>getCustomerCoupons(Category category) throws CustomerException;
-    List<Coupon>getCustomerCoupons(double maxPrice) throws CustomerException;
-    Customer getCustomerDetails() throws CustomerException;
-    void clearCustomerId();
 
+
+    Boolean login(String email, String password) throws CustomerException;
+
+    void purchaseCoupon(int couponID, Integer customerId) throws CustomerException, CouponException;
+
+    List<Coupon> getCustomerCoupons(Integer customerId) throws CustomerException;
+
+    List<Coupon> getCustomerCoupons(Category category, Integer customerId) throws CustomerException;
+
+    List<Coupon> getCustomerCoupons(double maxPrice, Integer customerId) throws CustomerException;
+
+    Customer getCustomerDetails(Integer customerId) throws CustomerException;
+
+    Customer getByDetails(String email, String name);
 }

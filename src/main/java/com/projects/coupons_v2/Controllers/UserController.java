@@ -27,30 +27,6 @@ public class UserController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerUser(@RequestBody UserDetails data) throws Exception {
-        switch (data.getUserType()){
-            case ADMIN -> {
-                //todo check if added regularly or require special validation
-
-            }
-
-            case COMPANY -> {
-                try {
-                    adminService.addCompany(new Company(0, data.getName(), data.getEmail()
-                            , data.getPassword(), null));
-                }catch (CompanyException exception){
-                    System.out.println("company already exists - creating user for company");
-                }
-
-            }
-            case CUSTOMER -> {
-                try {
-                    adminService.addCustomer(new Customer(0, data.getFirstName(), data.getLastName()
-                            , data.getEmail(), data.getPassword(), null));
-                }catch (CustomerException exception){
-                    System.out.println("customer already exists - creating user for customer");
-                }
-            }
-        }
         usersService.registerUser(data);
     }
 
@@ -60,22 +36,20 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody Credentials credentials) throws Exception{
         HttpHeaders headers = new HttpHeaders();
+
         switch (credentials.getUserType()){
             case ADMIN -> {adminService.login(credentials.getEmail(), credentials.getPassword());
 
             }
             case COMPANY -> {companyService.login(credentials.getEmail(), credentials.getPassword());}
             case CUSTOMER -> {customerService.login(credentials.getEmail(), credentials.getPassword());}
+
         }
         UserDetails userDetails = usersService.loginUser(credentials);
             headers.set("Authorization","Bearer "+jwt.generateToken(userDetails));
             return new ResponseEntity<>(true,headers,HttpStatus.OK);
 
     }
-    @GetMapping("/logout/{userType}")
-    public void logout(@PathVariable UserType userType){
-        usersService.logout(userType);
 
-    }
 
 }

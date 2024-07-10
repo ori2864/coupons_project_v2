@@ -7,5 +7,5 @@ import com.projects.coupons_v2.Beans.UserType;
 public interface UserService {
      boolean registerUser(UserDetails user) throws Exception;
      UserDetails loginUser(Credentials data) throws Exception;
-     void logout(UserType userType);
+
 }

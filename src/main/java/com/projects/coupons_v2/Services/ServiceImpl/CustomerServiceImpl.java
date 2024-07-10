@@ -3,7 +3,6 @@ package com.projects.coupons_v2.Services.ServiceImpl;
 import com.projects.coupons_v2.Beans.Category;
 import com.projects.coupons_v2.Beans.Coupon;
 import com.projects.coupons_v2.Beans.Customer;
-import com.projects.coupons_v2.Beans.UserDetails;
 import com.projects.coupons_v2.Exceptions.CouponExceptions.CouponException;
 import com.projects.coupons_v2.Exceptions.CouponExceptions.CouponMsg;
 import com.projects.coupons_v2.Exceptions.CustomerExceptions.CustomerException;
@@ -13,7 +12,6 @@ import com.projects.coupons_v2.Repositories.CustomerRepo;
 import com.projects.coupons_v2.Services.ServiceInterfaces.CustomerService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -28,25 +26,27 @@ public class CustomerServiceImpl implements CustomerService {
     private final CouponRepo couponRepo;
 
 
-    private Integer customerID;
 
     @Override
     public Boolean login(String email, String password) throws CustomerException {
         if (customerRepo.existsByEmailAndPassword(email, password)) {
             Customer customer = customerRepo.findByEmailAndPassword(email, password);
-            this.setCustomerID(customer.getId());
             return true;
         }
         throw new CustomerException(CustomerMsg.CUSTOMER_DOES_NOT_EXIST);
     }
 
     @Override
-    public void purchaseCoupon(int couponID) throws CustomerException, CouponException {
-        if (customerRepo.existsById(this.customerID) && couponRepo.existsById(couponID)) {
-            Customer customer = customerRepo.findById(customerID).get();
+    public void purchaseCoupon(int couponID, Integer customerId) throws CustomerException, CouponException {
+        if (customerRepo.existsById(customerId) && couponRepo.existsById(couponID)) {
+            Customer customer = customerRepo.findById(customerId).get();
             Coupon coupon =couponRepo.findById(couponID).get();
             int oldAmount = coupon.getAmount();
             if (oldAmount<=0){throw new CouponException(CouponMsg.COUPON_OUT_OF_STOCK);
+            }
+            if (customer.getCoupons().contains(coupon)){
+                System.out.println(customer.getCoupons());
+                throw new CustomerException(CustomerMsg.COUPON_ALREADY_PURCHASED);
             }
             coupon.setAmount(oldAmount-1);
             couponRepo.saveAndFlush(coupon);
@@ -61,39 +61,40 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Coupon> getCustomerCoupons() throws CustomerException {
-        if (customerRepo.findById(customerID).isPresent()) {
-            return customerRepo.findById(customerID).get().getCoupons();
+    public List<Coupon> getCustomerCoupons(Integer customerId) throws CustomerException {
+        if (customerRepo.findById(customerId).isPresent()) {
+            return customerRepo.findById(customerId).get().getCoupons();
         }
         throw new CustomerException(CustomerMsg.CUSTOMER_DOES_NOT_EXIST);
     }
 
     @Override
-    public List<Coupon> getCustomerCoupons(Category category) throws CustomerException {
-        if (customerRepo.findById(customerID).isPresent()) {
-            return getCustomerCoupons().stream().filter(coupon -> coupon.getCategory().equals(category)).toList();
+    public List<Coupon> getCustomerCoupons(Category category, Integer customerId) throws CustomerException {
+        if (customerRepo.findById(customerId).isPresent()) {
+            return getCustomerCoupons(customerId).stream().filter(coupon -> coupon.getCategory().equals(category)).toList();
         }
         throw new CustomerException(CustomerMsg.CUSTOMER_DOES_NOT_EXIST);
     }
 
     @Override
-    public List<Coupon> getCustomerCoupons(double maxPrice) throws CustomerException {
-        if (customerRepo.findById(customerID).isPresent()) {
-            return getCustomerCoupons().stream().filter(coupon -> coupon.getPrice() < maxPrice).toList();
+    public List<Coupon> getCustomerCoupons(double maxPrice, Integer customerId) throws CustomerException {
+        if (customerRepo.findById(customerId).isPresent()) {
+            return getCustomerCoupons(customerId).stream().filter(coupon -> coupon.getPrice() < maxPrice).toList();
         }
         throw new CustomerException(CustomerMsg.CUSTOMER_DOES_NOT_EXIST);
     }
 
     @Override
-    public Customer getCustomerDetails() throws CustomerException {
-        if (customerRepo.findById(customerID).isPresent()) {
-            return customerRepo.findById(customerID).get();
+    public Customer getCustomerDetails(Integer customerId) throws CustomerException {
+        if (customerRepo.findById(customerId).isPresent()) {
+            return customerRepo.findById(customerId).get();
         }
         throw new CustomerException(CustomerMsg.CUSTOMER_DOES_NOT_EXIST);
     }
 
     @Override
-    public void clearCustomerId() {
-        this.setCustomerID(null);
+    public Customer getByDetails(String email, String password) {
+        return customerRepo.findByEmailAndPassword(email, password);
     }
+
 }

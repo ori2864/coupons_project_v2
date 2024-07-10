@@ -31,8 +31,8 @@ public class AdminController {
     @PostMapping("/add/company")
     public ResponseEntity<?> addCompany(@RequestHeader("Authorization") String jwt, @RequestBody Company company) throws CouponException, CompanyException {
         HttpHeaders headers=jwtUtil.getHeaders(jwt);
-        adminService.addCompany(company);
-        return new ResponseEntity<>(true, headers, HttpStatus.CREATED);
+        Company returnCompany = adminService.addCompany(company);
+        return new ResponseEntity<>(returnCompany.getId(), headers, HttpStatus.CREATED);
     }
 
 
@@ -69,8 +69,8 @@ public class AdminController {
     @PostMapping("/add/customer")
     public ResponseEntity<?> addCustomer(@RequestHeader("Authorization") String jwt, @RequestBody Customer customer) throws CouponException, CustomerException {
         HttpHeaders headers=jwtUtil.getHeaders(jwt);
-        adminService.addCustomer(customer);
-        return new ResponseEntity<>(true, headers, HttpStatus.CREATED);
+        Customer returnCustomer = adminService.addCustomer(customer);
+        return new ResponseEntity<>(returnCustomer.getId(), headers, HttpStatus.CREATED);
     }
 
 
@@ -103,10 +103,5 @@ public class AdminController {
     }
 
 
-    @DeleteMapping("/delete/coupon/{customerID}/{couponID}")
-    public ResponseEntity<?> deleteCouponPurchase(@RequestHeader("Authorization") String jwt, @PathVariable int customerID, @PathVariable int couponID) {
-        HttpHeaders headers = jwtUtil.getHeaders(jwt);
-        adminService.deleteCouponPurchase(customerID, couponID);
-        return new ResponseEntity<>(true, headers, HttpStatus.OK);
-    }
+
 }

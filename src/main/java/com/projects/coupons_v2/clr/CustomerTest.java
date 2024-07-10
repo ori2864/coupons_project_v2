@@ -1,15 +1,11 @@
 package com.projects.coupons_v2.clr;
 
-import com.projects.coupons_v2.Beans.Category;
-import com.projects.coupons_v2.Beans.Credentials;
-import com.projects.coupons_v2.Beans.UserDetails;
-import com.projects.coupons_v2.Beans.UserType;
+import com.projects.coupons_v2.Beans.*;
 import com.projects.coupons_v2.Controllers.UserController;
 import com.projects.coupons_v2.Services.ServiceInterfaces.CustomerService;
 import com.projects.coupons_v2.utils.DemoData.CustomerData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -25,17 +21,22 @@ public class CustomerTest implements CommandLineRunner {
     private final Credentials credentials1 = customerData.getCredentials1();
     @Override
     public void run(String... args) throws Exception {
+//        login returns a token and frontend extracts customerId(1)
         System.out.println("===== start customer test =====");
         userController.registerUser(userDetails1);
-        userController.loginUser(credentials1);
-        customerService.login("tester@email.com","passi123");
-        customerService.purchaseCoupon(1);
-        System.out.println("printing customer details: "+customerService.getCustomerDetails());
-        System.out.println("printing all customer coupons: "+customerService.getCustomerCoupons());
-        System.out.println("printing all customer coupons below price 10: "+customerService.getCustomerCoupons(10));
-        System.out.println("printing all customer coupons by category - electricity: "+customerService.getCustomerCoupons(Category.Electricity));
 
-        userController.logout(UserType.CUSTOMER);
+        userController.loginUser(credentials1);
+
+        Integer relevantId = 1;
+
+        customerService.login("tester@email.com","passi123");
+        customerService.purchaseCoupon(1,relevantId);
+        System.out.println("printing customer details: "+customerService.getCustomerDetails(relevantId));
+        System.out.println("printing all customer coupons: "+customerService.getCustomerCoupons(relevantId));
+        System.out.println("printing all customer coupons below price 10: "+customerService.getCustomerCoupons(10,relevantId));
+        System.out.println("printing all customer coupons by category - electricity: "+customerService.getCustomerCoupons(Category.ELECTRICITY,relevantId));
+
+
         System.out.println("===== end customer test =====");
     }
 }

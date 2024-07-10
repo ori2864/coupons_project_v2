@@ -19,7 +19,7 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("*")
                         .allowedMethods("GET","POST","PUT","DELETE")
-                        .allowedHeaders("Authorization","Content-Type")
+                        .allowedHeaders("Authorization","Content-Type","WorkId")
                         .exposedHeaders("Authorization");
             }
         };

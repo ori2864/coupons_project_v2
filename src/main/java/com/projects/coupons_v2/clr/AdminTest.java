@@ -27,6 +27,7 @@ public class AdminTest implements CommandLineRunner {
     private Company company3 = adminData.getCompany3();
     private Customer customer1 = adminData.getCustomer1();
     private UserDetails userDetails1 = adminData.getUserDetails1();
+    private UserDetails guestDetails = adminData.getGuestDetails();
     private Credentials credentials1 = adminData.getCredentials1();
     @Override
     public void run(String... args) throws Exception {
@@ -34,6 +35,7 @@ public class AdminTest implements CommandLineRunner {
 //========================building and adding companies&customer============================
         userController.registerUser(userDetails1);
         userController.loginUser(credentials1);
+        userController.registerUser(guestDetails);
         adminService.addCompany(company1);
         adminService.addCompany(company2);
         adminService.addCompany(company3);
@@ -59,7 +61,7 @@ public class AdminTest implements CommandLineRunner {
 
         //================================================================
 
-            userController.logout(UserType.ADMIN);
+         
         System.out.println("===== end admin test =====");
 
 

@@ -18,6 +18,7 @@ public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private int workId;
     private String name;
     private String firstName;
     private String lastName;

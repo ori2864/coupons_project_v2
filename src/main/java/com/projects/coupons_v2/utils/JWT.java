@@ -33,6 +33,7 @@ public class JWT {
     //the token need to get clamis which is the information in the hashcode
     public String generateToken(UserDetails userData) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put(("workId"), userData.getWorkId());
         claims.put("userType", userData.getUserType());
         claims.put("userName", userData.getName());
         return createToken(claims, userData.getEmail());
@@ -41,6 +42,7 @@ public class JWT {
     public String generateToken(String token) {
         Map<String, Object> claims = new HashMap<>();
         Claims ourClaims = extractAllClaims(token);
+        claims.put(("workId"), ourClaims.get("workId"));
         claims.put("userName", ourClaims.get("userName"));
         claims.put("userType", ourClaims.get("userType"));
         return createToken(claims, ourClaims.getSubject());

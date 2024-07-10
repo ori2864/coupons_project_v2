@@ -38,14 +38,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void addCompany(Company company) throws CompanyException {
+        public Company addCompany(Company company) throws CompanyException {
 //check if company name or email already exist and throw exception if needed
         if (companyRepo.existsByName(company.getName())
                 || companyRepo.existsByEmail(company.getEmail())) {
             throw new CompanyException(CompanyMsg.COMPANY_ALREADY_EXISTS);
         }
 
-        companyRepo.save(company);
+        return companyRepo.save(company);
     }
 
     @Override
@@ -87,17 +87,15 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    @Override
-    public void deleteCouponPurchase(int customerID, int couponID) {
-        //todo
-    }
+
 
     @Override
-    public void addCustomer(Customer customer) throws CustomerException {
+    public Customer addCustomer(Customer customer) throws CustomerException {
         if (customerRepo.existsByEmail(customer.getEmail())) {
             throw new CustomerException(CustomerMsg.CUSTOMER_ALREADY_EXISTS);
         }
         customerRepo.save(customer);
+        return customer;
     }
 
     @Override

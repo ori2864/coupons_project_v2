@@ -34,7 +34,7 @@ public class Customer {
 
     @Singular
 //    @OneToMany(cascade = CascadeType.REMOVE)
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "customers_coupons", joinColumns = @JoinColumn(name = "customerId"),
 
             inverseJoinColumns = @JoinColumn(name = "couponId"))

@@ -4,9 +4,7 @@ import com.projects.coupons_v2.Beans.Credentials;
 import com.projects.coupons_v2.Beans.UserDetails;
 import com.projects.coupons_v2.Beans.UserType;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Data

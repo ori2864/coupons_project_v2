@@ -2,7 +2,6 @@ package com.projects.coupons_v2.utils.DemoData;
 
 import com.projects.coupons_v2.Beans.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Date;
@@ -18,7 +17,7 @@ public class CompanyData {
             .password("1234")
             .userType(UserType.COMPANY)
             .build();
-    private final Credentials credentials1=new Credentials("demo@company.com","1234",UserType.COMPANY);
+    private final Credentials credentials1=new Credentials("demo@company.com","1234", UserType.COMPANY);
 //    private Company company2=Company.builder()
     //            .name("test2Company")
 //            .email("test2@spring.com")
@@ -38,7 +37,7 @@ public class CompanyData {
     private final Coupon coupon1=Coupon.builder()
             .companyID(0)
             .amount(2)
-            .category(Category.Electricity)
+            .category(Category.ELECTRICITY)
             .image("image")
             .description("bla bla")
             .price(7)
@@ -49,7 +48,7 @@ public class CompanyData {
     private final Coupon coupon2=Coupon.builder()
             .companyID(0)
             .amount(5)
-            .category(Category.Restaurant)
+            .category(Category.RESTAURANT)
             .image("image")
             .description("bla bla")
             .price(9)
@@ -60,7 +59,7 @@ public class CompanyData {
     private final Coupon coupon3=Coupon.builder()
             .companyID(0)
             .amount(6)
-            .category(Category.Electricity)
+            .category(Category.ELECTRICITY)
             .image("image")
             .description("galaxy note 9 discount")
             .price(20)
@@ -71,7 +70,7 @@ public class CompanyData {
     private final Coupon coupon4=Coupon.builder()
             .companyID(0)
             .amount(8)
-            .category(Category.Electricity)
+            .category(Category.ELECTRICITY)
             .image("image")
             .description("big microwave, partially works")
             .price(20)

@@ -26,50 +26,50 @@ public class CompanyController  {
 
 
     @PostMapping("/add/coupon")
-    public ResponseEntity<?> addCoupon(@RequestHeader("Authorization") String jwt, @RequestBody Coupon coupon) throws CouponException {
+    public ResponseEntity<?> addCoupon(@RequestHeader("Authorization") String jwt, @RequestBody Coupon coupon,@RequestHeader("WorkId") Integer companyId) throws CouponException {
         HttpHeaders headers=jwtUtil.getHeaders(jwt);
-        companyService.addCoupon(coupon);
-        return new ResponseEntity<>(true, headers, HttpStatus.CREATED);
+        Coupon coupon1 = companyService.addCoupon(coupon,companyId);
+        return new ResponseEntity<>(coupon1.getId(), headers, HttpStatus.CREATED);
     }
 
 
     @PutMapping("/update/coupon")
-    public ResponseEntity<?> updateCoupon(@RequestHeader("Authorization") String jwt,@RequestBody Coupon coupon) throws CouponException {
+    public ResponseEntity<?> updateCoupon(@RequestHeader("Authorization") String jwt,@RequestBody Coupon coupon,@RequestHeader("WorkId") Integer companyId) throws CouponException {
         HttpHeaders headers=jwtUtil.getHeaders(jwt);
-        companyService.updateCoupon(coupon);
+        companyService.updateCoupon(coupon,companyId);
         return new ResponseEntity<>(true, headers, HttpStatus.ACCEPTED);
     }
 
 
     @DeleteMapping("/delete/coupon/{couponID}")
-    public ResponseEntity<?> deleteCoupon(@RequestHeader("Authorization") String jwt,@PathVariable int couponID) throws CompanyException {
+    public ResponseEntity<?> deleteCoupon(@RequestHeader("Authorization") String jwt,@PathVariable int couponID,@RequestHeader("WorkId") Integer companyId) throws CompanyException {
         HttpHeaders headers=jwtUtil.getHeaders(jwt);
-        companyService.deleteCoupon(couponID);
+        companyService.deleteCoupon(couponID,companyId);
         return new ResponseEntity<>(true, headers, HttpStatus.ACCEPTED);
     }
 
 
     @GetMapping("/get/coupon/all")
-    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt) throws CompanyException {
-        return new ResponseEntity<>(companyService.getCompanyCoupons(), jwtUtil.getHeaders(jwt), HttpStatus.OK);
+    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt,@RequestHeader("WorkId") Integer companyId) throws CompanyException {
+        return new ResponseEntity<>(companyService.getCompanyCoupons(companyId), jwtUtil.getHeaders(jwt), HttpStatus.OK);
     }
 
 
     @GetMapping("/get/coupon/by/category/{category}")
-    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt,@PathVariable Category category) throws CompanyException {
-        return new ResponseEntity<>(companyService.getCompanyCoupons(category), jwtUtil.getHeaders(jwt), HttpStatus.OK);
+    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt,@PathVariable Category category,@RequestHeader("WorkId") Integer companyId) throws CompanyException {
+        return new ResponseEntity<>(companyService.getCompanyCoupons(category,companyId), jwtUtil.getHeaders(jwt), HttpStatus.OK);
     }
 
 
     @GetMapping("/get/coupon/by/price/{maxPrice}")
-    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt,@PathVariable double maxPrice) throws CompanyException {
-        return new ResponseEntity<>(companyService.getCompanyCoupons(maxPrice), jwtUtil.getHeaders(jwt), HttpStatus.OK);
+    public ResponseEntity<?> getCompanyCoupons(@RequestHeader("Authorization") String jwt,@PathVariable double maxPrice,@RequestHeader("WorkId") Integer companyId) throws CompanyException {
+        return new ResponseEntity<>(companyService.getCompanyCoupons(maxPrice,companyId), jwtUtil.getHeaders(jwt), HttpStatus.OK);
     }
 
 
     @GetMapping("/get/companyDetails")
-    public ResponseEntity<?> getCompanyDetails(@RequestHeader("Authorization") String jwt) throws CompanyException {
-        return new ResponseEntity<>(companyService.getCompanyDetails(), jwtUtil.getHeaders(jwt), HttpStatus.OK);
+    public ResponseEntity<?> getCompanyDetails(@RequestHeader("Authorization") String jwt,@RequestHeader("WorkId") Integer companyId) throws CompanyException {
+        return new ResponseEntity<>(companyService.getCompanyDetails(companyId), jwtUtil.getHeaders(jwt), HttpStatus.OK);
     }
 
 }
